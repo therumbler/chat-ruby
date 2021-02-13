@@ -1,6 +1,7 @@
 
 class Processor
     def initialize(ws)
+        puts "DEBUG: connected"
         @go = true
         @ws = ws
         ws.on :message do |event|
@@ -14,6 +15,7 @@ class Processor
         end
     end
     def background
+        puts "DEBUG: start background"
         while @go
             @ws.send('hi from background')
             sleep 1
