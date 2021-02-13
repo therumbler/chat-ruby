@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>om</title>
+        <title>chat</title>
     </head>
     <body>
-        <h1>hi</h1>
+        <h1>chat</h1>
+        <ul id="messages">
+
+        </ul>
         <script>
+const $ = document.querySelector.bind(document);
 let host = document.location.href.replace('http', 'ws');
 var ws = new WebSocket(host);
+var messages = $('#messages');
+
 ws.onopen = function (event) {
     ws.send("Can you hear me?");
 };
 ws.onmessage = function (event) {
     console.log(event.data);
+    let el = document.createElement('li');
+    el.innerText = (event.data);
+    messages.appendChild(el)
 }
         </script>
     </body>

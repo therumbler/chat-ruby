@@ -12,8 +12,10 @@ end
 App = lambda do |env|
   if Faye::WebSocket.websocket?(env)
     ws = Faye::WebSocket.new(env)
-    Processor.new ws
-
+    proc = Processor.new ws
+    Thread.new do |task|
+      proc.background
+    end
     # Return async Rack response
     ws.rack_response
   else
