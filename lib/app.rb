@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faye/websocket'
 
 require_relative './processor'
@@ -13,7 +15,7 @@ App = lambda do |env|
   if Faye::WebSocket.websocket?(env)
     ws = Faye::WebSocket.new(env)
     proc = Processor.new ws
-    Thread.new do |task|
+    Thread.new do |_task|
       proc.background
     end
     # Return async Rack response
