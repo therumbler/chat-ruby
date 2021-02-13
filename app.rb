@@ -1,5 +1,6 @@
 require 'faye/websocket'
 
+require_relative './processor'
 
 def read_index
   file = File.open('./static/index.html')
@@ -11,15 +12,7 @@ end
 App = lambda do |env|
   if Faye::WebSocket.websocket?(env)
     ws = Faye::WebSocket.new(env)
-
-    ws.on :message do |event|
-      ws.send(event.data)
-    end
-
-    ws.on :close do |event|
-      p [:close, event.code, event.reason]
-      ws = nil
-    end
+    Processor.new ws
 
     # Return async Rack response
     ws.rack_response
