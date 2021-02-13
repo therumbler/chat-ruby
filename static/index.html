@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>om</title>
+    </head>
+    <body>
+        <h1>hi</h1>
+        <script>
+let host = document.location.host;
+var ws = new WebSocket("wss://" + host);
+ws.onopen = function (event) {
+    ws.send("Can you hear me?");
+};
+ws.onmessage = function (event) {
+    console.log(event.data);
+}
+        </script>
+    </body>
+</html>
