@@ -1,4 +1,4 @@
-require_relative './app'
+require_relative './lib/app'
 
 
 run App
