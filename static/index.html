@@ -6,8 +6,9 @@
     <body>
         <h1>hi</h1>
         <script>
-let host = document.location.host;
-var ws = new WebSocket("wss://" + host);
+let protocol = document.location.protocol == 'https:' ? 'wss://': 'ws://';
+let host = protocol + document.location.host;
+var ws = new WebSocket(host);
 ws.onopen = function (event) {
     ws.send("Can you hear me?");
 };
