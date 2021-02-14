@@ -24,7 +24,7 @@ class Processor
   def background
     puts 'DEBUG: start background'
     @om.events do |event|
-      @ws.send(event)
+      @ws.send(event.to_json)
       # sleep 1
     end
     puts 'ERROR: exit background'
