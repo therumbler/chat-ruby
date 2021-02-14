@@ -4,7 +4,6 @@ require 'net/http'
 require 'securerandom'
 
 class Om
-  attr_accessor :go
   USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/7046A194A"
   
   def initialize
@@ -35,7 +34,11 @@ class Om
       end
       puts "INFO: response code #{response.code}"
       puts "INFO: response #{response.uri}"
-      return JSON.parse(response.body)
+      begin
+        JSON.parse(response.body)
+      rescue JSON::ParserError
+        {}
+      end
     end
   end
 
@@ -48,21 +51,28 @@ class Om
     @client_id = resp['clientID']
     puts "client_id = #{@client_id}"
     puts "INFO: start resp #{resp}"
+    @go = true
   end
 
+  def disconnect
+    @go = false
+    resp = self._call('disconnect', 'post', id: @client_id)
+  end
+
+  def send_message(msg)
+    self._call('send', 'post', id: @client_id, msg: msg)
+  end
+  
   def events
-    counter = 1
     while @go
       unless @client_id
         puts 'ERROR: no client_id'
         @go = false
         return
       end
-      resp = self._call('events', 'post', client_id: @client_id)
-      puts "INFO: resp  #{resp.to_s}"
+      resp = self._call('events', 'post', id: @client_id)
+      puts "INFO: events resp  #{resp.to_s}"
       yield resp
-      counter += 1
-      sleep 5
     end
     puts 'INFO: exit messages'
   end
