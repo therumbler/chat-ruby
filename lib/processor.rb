@@ -21,11 +21,17 @@ class Processor
     end
   end
 
+  def disconnect
+    @om.disconnect
+    @om.start
+    Thread.new do |_task|
+      self.background
+    end
+  end
   def process_om_event(event)
     @ws.send(event.to_json)
     if event[0] == 'strangerDisconnected'
-      @om.disconnect
-      @om.start
+      self.disconnect
     end
   end
   def process_om_events(events)
@@ -38,24 +44,21 @@ class Processor
   end
   def process_command(cmd)
     if cmd == '/n'
-      @om.disconnect
-      @om.start
+      self.disconnect
     end
   end
   def process_client_event(event)
     if event.start_with? '/'
+      self.process_command(event)
     else
       @om.send_message(event)
     end
   end
   def background
-    puts 'DEBUG: start background'
     @om.events do |events|
       self.process_om_events(events)
       # sleep 1
     end
-    puts 'ERROR: exit background'
     sleep 2
-    self.background
   end
 end

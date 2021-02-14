@@ -32,8 +32,6 @@ class Om
       else
         response = Net::HTTP.post_form(uri, kwargs)
       end
-      puts "INFO: response code #{response.code}"
-      puts "INFO: response #{response.uri}"
       begin
         JSON.parse(response.body)
       rescue JSON::ParserError
@@ -47,10 +45,10 @@ class Om
     randid = SecureRandom.hex[0..10]
     params = {randid: randid, firstevents:'1'}
     resp = self._call('start', 'get', params)
-    puts "INFO: start resp #{resp}"
     @client_id = resp['clientID']
+    @events = resp['events']
+    puts "INFO: start events #{@events}"
     puts "client_id = #{@client_id}"
-    puts "INFO: start resp #{resp}"
     @go = true
   end
 
@@ -70,9 +68,12 @@ class Om
         @go = false
         return
       end
-      resp = self._call('events', 'post', id: @client_id)
-      puts "INFO: events resp  #{resp.to_s}"
-      yield resp
+      unless @events
+        @events = self._call('events', 'post', id: @client_id)
+      end
+      puts "INFO: events  #{@events.to_s}"
+      yield @events
+      @events = nil
     end
     puts 'INFO: exit messages'
   end
