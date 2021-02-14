@@ -16,12 +16,15 @@ class Processor
       @om.go = false
       ws = nil
     end
+    Thread.new do |_task|
+      self.background
+    end
   end
 
   def background
     puts 'DEBUG: start background'
-    @om.messages do |message|
-      @ws.send(message)
+    @om.events do |event|
+      @ws.send(event)
       # sleep 1
     end
     puts 'ERROR: exit background'
