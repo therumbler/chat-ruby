@@ -2,18 +2,39 @@
 <html>
     <head>
         <title>chat</title>
+        <style> 
+        ul.scroll { 
+            margin:4px, 4px; 
+            padding:4px; 
+            width: 90%; 
+            height: 260px; 
+            overflow-x: hidden; 
+            overflow-y: auto; 
+            text-align:justify; 
+            border-color:black;
+            border-width: 1px;
+        } </style>
+        <script src="static/reconnecting-websocket.min.js"></script>
     </head>
     <body>
         <h1>chat</h1>
-        <ul id="messages">
-
+        <ul class="scroll" id="messages">
         </ul>
+        <form id="form">
+        <input type="text" id="message"></input>
+    </form>
         <script>
 const $ = document.querySelector.bind(document);
 let host = document.location.href.replace('http', 'ws');
-var ws = new WebSocket(host);
+var ws = new ReconnectingWebSocket(host);
 var messages = $('#messages');
-
+$("#form").addEventListener('submit', function(evt){
+    evt.preventDefault();
+    let message = $("#message").value;
+    ws.send(message);
+    $("#message").value = '';
+    return false;
+});
 ws.onopen = function (event) {
     ws.send("Can you hear me?");
 };
