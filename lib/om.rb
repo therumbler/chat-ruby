@@ -29,14 +29,13 @@ class Om
         uri.query = URI.encode_www_form(kwargs)
         req = Net::HTTP::Get.new uri
         req['USER_AGENT'] = USER_AGENT
-        puts "INFO: user_agent #{USER_AGENT}"
         response = http.request req
       else
         response = Net::HTTP.post_form(uri, kwargs)
       end
       puts "INFO: response code #{response.code}"
       puts "INFO: response #{response.uri}"
-      return response.body.to_json
+      return JSON.parse(response.body)
     end
   end
 
@@ -45,6 +44,7 @@ class Om
     randid = SecureRandom.hex[0..10]
     params = {randid: randid, firstevents:'1'}
     resp = self._call('start', 'get', params)
+    puts "INFO: start resp #{resp}"
     @client_id = resp['clientID']
     puts "client_id = #{@client_id}"
     puts "INFO: start resp #{resp}"
