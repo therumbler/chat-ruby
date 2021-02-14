@@ -53,6 +53,11 @@ class Om
   def events
     counter = 1
     while @go
+      unless @client_id
+        puts 'ERROR: no client_id'
+        @go = false
+        return
+      end
       resp = self._call('events', 'post', client_id: @client_id)
       puts "INFO: resp  #{resp.to_s}"
       yield resp
