@@ -53,6 +53,13 @@ class Om
     randid = SecureRandom.hex[0..10]
     params = {randid: randid, firstevents:'1'}
     resp = self._call('start', 'get', params)
+    puts "DEBUG: resp #{resp}"
+    if resp.empty?
+      puts 'ERROR: can\'t connect'
+      @events = ['can\'t connect']
+      return
+    end
+
     @client_id = resp['clientID']
     @events = resp['events']
     puts "INFO: start events #{@events}"
@@ -72,6 +79,7 @@ class Om
   
   def events
     while @go
+      yield @events
       unless @client_id
         puts 'ERROR: no client_id'
         @go = false
@@ -81,7 +89,7 @@ class Om
         @events = self._call('events', 'post', id: @client_id)
       end
       puts "INFO: events  #{@events.to_s}"
-      yield @events
+     
       @events = nil
     end
     puts 'INFO: exit messages'
