@@ -30,7 +30,15 @@ class Om
         req['USER_AGENT'] = USER_AGENT
         response = http.request req
       else
-        response = Net::HTTP.post_form(uri, kwargs)
+        begin
+          response = Net::HTTP.post_form(uri, kwargs)
+        rescue Net::OpenTimeout
+          puts 'ERROR: OpenTimeout'
+          return {}
+        rescue Net::ReadTimeout
+          puts 'ERROR: ReadTimeout'
+          return {}
+        end
       end
       begin
         JSON.parse(response.body)
@@ -61,6 +69,7 @@ class Om
 
   def disconnect
     @go = false
+
     resp = self._call('disconnect', 'post', id: @client_id)
   end
 

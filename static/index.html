@@ -21,29 +21,8 @@
         <ul class="scroll" id="messages">
         </ul>
         <form id="form">
-        <input type="text" id="message"></input>
-    </form>
-        <script>
-const $ = document.querySelector.bind(document);
-let host = document.location.href.replace('http', 'ws');
-var ws = new ReconnectingWebSocket(host);
-var messages = $('#messages');
-$("#form").addEventListener('submit', function(evt){
-    evt.preventDefault();
-    let message = $("#message").value;
-    ws.send(message);
-    $("#message").value = '';
-    return false;
-});
-ws.onopen = function (event) {
-    ws.send("Can you hear me?");
-};
-ws.onmessage = function (event) {
-    console.log(event.data);
-    let el = document.createElement('li');
-    el.innerText = (event.data);
-    messages.appendChild(el)
-}
-        </script>
+            <input type="text" id="message" autocomplete="off" ></input>
+        </form>
+        <script src="static/app.js"></script>
     </body>
 </html>
