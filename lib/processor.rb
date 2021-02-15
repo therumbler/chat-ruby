@@ -59,6 +59,6 @@ class Processor
       self.process_om_events(events)
       # sleep 1
     end
-    sleep 2
+    puts 'INFO: background ended'
   end
 end
