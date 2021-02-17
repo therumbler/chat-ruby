@@ -1,6 +1,6 @@
 FROM ruby:2.7.2
 WORKDIR /build
-EXPOSE 9292
+EXPOSE 2600
 
 COPY Gemfile* ./
 RUN bundle install
