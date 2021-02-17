@@ -2,6 +2,8 @@
 <html>
     <head>
         <title>chat</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8">
         <style> 
         ul.scroll { 
             margin:4px, 4px; 
@@ -13,16 +15,30 @@
             text-align:justify; 
             border-color:black;
             border-width: 1px;
-        } </style>
+        }
+        input {
+            height: 1.2em;
+            width: 100%;
+            font-size: 1.2em;
+        }
+        #main {
+            max-width: 800px;
+            margin-right:auto;
+            margin-left:auto;
+            margin-bottom: 10px;
+        }
+        </style>
         <script src="static/reconnecting-websocket.min.js"></script>
     </head>
     <body>
-        <h1>chat</h1>
-        <ul class="scroll" id="messages">
-        </ul>
-        <form id="form">
-            <input type="text" id="message" autocomplete="off" ></input>
-        </form>
+        <div id="main">
+            <h1>chat</h1>
+            <ul class="scroll" id="messages">
+            </ul>
+            <form id="form">
+                <input type="text" id="message" autocomplete="off" ></input>
+            </form>
+        </div>
         <script src="static/app.js"></script>
     </body>
 </html>
